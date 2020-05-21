@@ -1,7 +1,6 @@
 public class DriverV2
 {
-  private Ball[] reds = new Ball[7];
-  private Ball[] yellows = new Ball[7];
+  private Ball[] playballs = new Ball[16];
   private GameArena ga = new GameArena(900,500); //table to be 800x400
 
   private Rectangle table = new Rectangle(20,20,760,360,"GREEN",0);
@@ -29,51 +28,66 @@ public class DriverV2
 
   public void startPos(){
 
-    for(int i=0;i<7;i++){
-      reds[i] = new Ball(0,0,24,"RED",1,0,0);
-      yellows[i] = new Ball(0,0,24,"YELLOW",1,0,0);
+    for(int i=0;i<16;i++){
+      if(i==0){
+        playballs[i] = new Ball(150,200,24,"WHITE",1,8,0);
+      }
+      else if(i==1){
+        playballs[i] = new Ball(600,200,24,"BLACK",1,0,0);
+      }
+      else if(i<=8){
+      playballs[i] = new Ball(0,0,24,"RED",1,0,0);
+      }
+      else{
+        playballs[i] = new Ball(0,0,24,"YELLOW",1,0,0);
+      }
     }
-    reds[0].setXPosition(556);
-    reds[0].setYPosition(200);
 
-    reds[1].setXPosition(578);
-    reds[1].setYPosition(188);
+    playballs[2].setXPosition(554);
+    playballs[2].setYPosition(200);
 
-    reds[2].setXPosition(600);
-    reds[2].setYPosition(224);
 
-    reds[3].setXPosition(622);
-    reds[3].setYPosition(164);
+    playballs[3].setXPosition(578);
+    playballs[3].setYPosition(187);
 
-    reds[4].setXPosition(622);
-    reds[4].setYPosition(212);
+    playballs[10].setXPosition(578);
+    playballs[10].setYPosition(213);
 
-    reds[5].setXPosition(644);
-    reds[5].setYPosition(200);
 
-    reds[6].setXPosition(644);
-    reds[6].setYPosition(248);
+    playballs[9].setXPosition(600);
+    playballs[9].setYPosition(173);
 
-    yellows[0].setXPosition(600);
-    yellows[0].setYPosition(176);
+    playballs[4].setXPosition(600);
+    playballs[4].setYPosition(227);
 
-    yellows[1].setXPosition(578);
-    yellows[1].setYPosition(212);
 
-    yellows[2].setXPosition(622);
-    yellows[2].setYPosition(188);
+    playballs[5].setXPosition(623);
+    playballs[5].setYPosition(161);
 
-    yellows[3].setXPosition(622);
-    yellows[3].setYPosition(236);
+    playballs[11].setXPosition(623);
+    playballs[11].setYPosition(186);
 
-    yellows[4].setXPosition(644);
-    yellows[4].setYPosition(152);
+    playballs[6].setXPosition(623);
+    playballs[6].setYPosition(214);
 
-    yellows[5].setXPosition(644);
-    yellows[5].setYPosition(176);
+    playballs[12].setXPosition(623);
+    playballs[12].setYPosition(239);
 
-    yellows[6].setXPosition(644);
-    yellows[6].setYPosition(224);
+
+    playballs[13].setXPosition(645);
+    playballs[13].setYPosition(150);
+
+    playballs[14].setXPosition(645);
+    playballs[14].setYPosition(175);
+
+    playballs[7].setXPosition(645);
+    playballs[7].setYPosition(200);
+
+    playballs[15].setXPosition(645);
+    playballs[15].setYPosition(225);
+
+    playballs[8].setXPosition(645);
+    playballs[8].setYPosition(250);
 
     ga.addRectangle(table);
     ga.addRectangle(edge1);
@@ -88,12 +102,8 @@ public class DriverV2
     ga.addBall(hole5);
     ga.addBall(hole6);
 
-    ga.addBall(white);
-    ga.addBall(black);
-
-    for(int i=0;i<7;i++){
-      ga.addBall(reds[i]);
-      ga.addBall(yellows[i]);
+    for(int i=0;i<16;i++){
+      ga.addBall(playballs[i]);
     }
 
   }
@@ -101,40 +111,58 @@ public class DriverV2
   public void play(){
 
     while(true){
-      for(int k=0;k<7;k++){
-        reds[k].setXPosition((reds[k].getXPosition()+reds[k].getXVelocity()));
-        reds[k].setYPosition((reds[k].getYPosition()+reds[k].getYVelocity()));
 
-        if(reds[k].getXPosition()>(780-reds[k].getSize()/2)){ //right side bounce
-          reds[k].setXVelocity(-(reds[k].getXVelocity()));
-        }
-        if(reds[k].getXPosition()<20+reds[k].getSize()/2){ //left side bounce
-          reds[k].setXVelocity(-(reds[k].getXVelocity()));
-        }
-        if(reds[k].getYPosition()<20+reds[k].getSize()/2){ //top bounce
-          reds[k].setYVelocity(-(reds[k].getYVelocity()));
-        }
-        if(reds[k].getYPosition()>(380-reds[k].getSize()/2)){ //bottom bounce
-          reds[k].setYVelocity(-1*reds[k].getYVelocity());
+      for(int k=0;k<16;k++){
+
+        for(int i=k+1;i<16;i++){
+          if(playballs[k].collides(playballs[i])==true){
+            resolve(playballs[k],playballs[i]);
+          }
         }
 
-        yellows[k].setXPosition((yellows[k].getXPosition()+yellows[k].getXVelocity()));
-        yellows[k].setYPosition((yellows[k].getYPosition()+yellows[k].getYVelocity()));
+        if(playballs[k].getXPosition()>(780-playballs[k].getSize()/2)){ //right side bounce
+          playballs[k].setXVelocity(-(playballs[k].getXVelocity()));
+          playballs[k].setXPosition((playballs[k].getXPosition()+playballs[k].getXVelocity()));
+        }
+        if(playballs[k].getXPosition()<20+playballs[k].getSize()/2){ //left side bounce
+          playballs[k].setXVelocity(-(playballs[k].getXVelocity()));
+          playballs[k].setXPosition((playballs[k].getXPosition()+playballs[k].getXVelocity()));
+        }
+        if(playballs[k].getYPosition()<20+playballs[k].getSize()/2){ //top bounce
+          playballs[k].setYVelocity(-(playballs[k].getYVelocity()));
+          playballs[k].setYPosition((playballs[k].getYPosition()+playballs[k].getYVelocity()));
+        }
+        if(playballs[k].getYPosition()>(380-playballs[k].getSize()/2)){ //bottom bounce
+          playballs[k].setYVelocity(-1*playballs[k].getYVelocity());
+          playballs[k].setYPosition((playballs[k].getYPosition()+playballs[k].getYVelocity()));
+        }
 
-        if(yellows[k].getXPosition()>(780-yellows[k].getSize()/2)){ //right side bounce
-          yellows[k].setXVelocity(-(yellows[k].getXVelocity()));
-        }
-        if(yellows[k].getXPosition()<20+yellows[k].getSize()/2){ //left side bounce
-          yellows[k].setXVelocity(-(yellows[k].getXVelocity()));
-        }
-        if(yellows[k].getYPosition()<20+yellows[k].getSize()/2){ //top bounce
-          yellows[k].setYVelocity(-(yellows[k].getYVelocity()));
-        }
-        if(yellows[k].getYPosition()>(380-yellows[k].getSize()/2)){ //bottom bounce
-          yellows[k].setYVelocity(-1*yellows[k].getYVelocity());
-        }
+        playballs[k].setXPosition((playballs[k].getXPosition()+playballs[k].getXVelocity()));
+        playballs[k].setYPosition((playballs[k].getYPosition()+playballs[k].getYVelocity()));
       }
     ga.pause();
     }
   }
+
+  public void resolve(Ball a, Ball b){
+    double dx = b.getXPosition() - a.getXPosition();
+    double dy = b.getYPosition() - a.getYPosition();
+    double distance = Math.sqrt(dx*dx+dy*dy)-0.24;
+
+    dx = dx/distance;
+    dy = dy/distance;
+
+    double aci = a.getXVelocity()*dx + a.getYVelocity()*dy;
+    double bci = b.getXVelocity()*dx + b.getYVelocity()*dy;
+
+    double acf = bci;
+    double bcf = aci;
+
+    a.setXVelocity(a.getXVelocity()+(acf-aci)*dx);
+    a.setYVelocity(a.getYVelocity()+(acf-aci)*dy);
+
+    b.setXVelocity(b.getXVelocity()+(bcf-bci)*dx);
+    b.setYVelocity(b.getYVelocity()+(bcf-bci)*dy);
+  }
+
 }

@@ -1,3 +1,5 @@
+import java.util.Vector;
+
 /**
  * Models a simple solid sphere.
  * This class represents a Ball object. When combined with the GameArena class,
