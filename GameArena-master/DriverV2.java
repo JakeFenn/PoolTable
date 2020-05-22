@@ -1,4 +1,5 @@
-
+import java.awt.*;
+import java.awt.event.*;
 
 public class DriverV2
 {
@@ -21,13 +22,19 @@ public class DriverV2
   private Ball hole6  = new Ball(780,380,50,"BLACK",1,0,1);
 
   private Line backLine = new Line(180,20,180,380,2,"WHITE",1);
-  private Line aimLine =  new Line(180,200,542,200,2,"WHITE",1);
+  private Line aimLine =  new Line(180,200,330,200,2,"WHITE",1);
+
+  private boolean collision;
+  private boolean win = false;
+
+  private double power = 5;
+  private double angle = 0;
 
   public static void main(String[] args){
 
     DriverV2 dr = new DriverV2();
     dr.startPos();
-    dr.play();
+    dr.turn();
   }
 
   public void startPos(){
@@ -98,8 +105,8 @@ public class DriverV2
     playballs[15].setXPosition(647);
     playballs[15].setYPosition(226);
 
-    playballs[8].setXPosition(30); //647
-    playballs[8].setYPosition(30); //252
+    playballs[8].setXPosition(647);
+    playballs[8].setYPosition(252);
 
     ga.addRectangle(table);
     ga.addRectangle(edge1);
@@ -114,10 +121,7 @@ public class DriverV2
     ga.addBall(holes[4]);
     ga.addBall(holes[5]);
 
-    aimLine.setArrowSize(5);
-
     ga.addLine(backLine);
-    ga.addLine(aimLine);
 
     for(int i=0;i<16;i++){
       ga.addBall(playballs[i]);
@@ -125,17 +129,85 @@ public class DriverV2
 
   }
 
-  public void play(){
+  public void turn(){
+    int count = 0;
+    while(win == false){
+      count++;
+      count = count%2;
+      shot();
+    }
+  }
+
+  public void shot(){
+    double angleDeg = 0;
+    double angleRad = 0;
+    double x,y;
+    aimLine.setStart(playballs[0].getXPosition(),playballs[0].getYPosition());
+    aimLine.setEnds(playballs[0].getXPosition()+150,playballs[0].getYPosition());
+
+    ga.addLine(aimLine);
+
+    while(ga.enterPressed()==false){
+      angleDeg = angleDeg%360;
+      ga.pause();
+      ga.pause();
+      ga.pause();
+      ga.pause();
+
+      if(ga.rightPressed()==true){
+        if(power<9.9){
+          power += 0.2;
+          System.out.println(power);
+        }
+      }
+
+      if(ga.leftPressed()==true){
+        if(power>0.2){
+          power -= 0.2;
+          System.out.println(power);
+        }
+      }
+
+      if(ga.upPressed()==true){
+        angleDeg -= 1;
+        angleRad = Math.toRadians(angleDeg);
+        System.out.println(angleDeg);
+        System.out.println(angleRad);
+
+        x = playballs[0].getXPosition()+ Math.cos(angleRad)*150;
+        y = playballs[0].getYPosition() + Math.sin(angleRad)*150;
+        aimLine.setEnds(x,y);
+      }
+
+      if(ga.downPressed()==true){
+        angleDeg += 1;
+        angleRad = Math.toRadians(angleDeg);
+        System.out.println(angleDeg);
+
+        x = playballs[0].getXPosition() + Math.cos(angleRad)*150;
+        y = playballs[0].getYPosition() + Math.sin(angleRad)*150;
+        aimLine.setEnds(x,y);
+      }
+    }
+    ga.removeLine(aimLine);
+    play(power,angleRad);
+  }
+
+  public void play(double p, double a){ //double power
     double speed;
     int count = 0;
+    collision = false;
+
+    playballs[0].setXVelocity(power*Math.cos(a));
+    playballs[0].setYVelocity(power*Math.sin(a));
+
     while(count<1000){
-
-      System.out.println("count:"+count);
+      System.out.println(count);
       for(int k=0;k<16;k++){
-
         for(int i=k+1;i<16;i++){
           if(playballs[k].collides(playballs[i])==true){
             resolve(playballs[k],playballs[i]);
+            collision = true;
           }
         }
 
@@ -179,18 +251,49 @@ public class DriverV2
         }
       }
       count++;
-      rules();
       ga.pause();
     }
-    System.out.println("while end");
+    rules(); //collision
   }
 
-  public void rules(){
+  public void rules(){ //boolean collision
+
+    int rcount = 0;
+    int ycount = 0;
 
     if(playballs[0].getPotted()==true){
       playballs[0].setPotted(false);
       setWhite();
     }
+    if(playballs[1].getPotted()==true){
+      for(int i=2;i<9;i++){
+        if(playballs[i].getPotted()==true){
+          rcount++;
+        }
+      }
+      for(int i=9;i<16;i++){
+        if(playballs[i].getPotted()==true){
+          ycount++;
+        }
+      }
+      if(rcount==7){//red win
+        win = true;
+      }
+      if(ycount==7){//yellow win
+        win = true;
+      }
+      else{//cureent player wins
+        win = true;
+      }
+      if(collision==false){//opposite player gets 2 shots
+
+      }
+    }
+  }
+
+  public void addPower(){
+    power += 0.5;
+    System.out.println("add power");
   }
 
   public void setWhite(){

@@ -44,6 +44,17 @@ public class Line
 		return xEnd;
 	}
 
+	public void setEnds(double x, double y){
+		xEnd = x;
+		yEnd =y;
+		recalculateArrowhead();
+	}
+
+	public void setStart(double x,double y){
+		xStart = x;
+		yStart =y;
+		recalculateArrowhead();
+	}
 
 	/**
 	 * Obtains the start position of this line on the Y axis.

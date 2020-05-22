@@ -471,6 +471,7 @@ public class GameArena extends JPanel implements Runnable, KeyListener, MouseLis
 
  	public void keyPressed(KeyEvent e)
 	{
+		//System.out.println("key pressed");
 		keyAction(e,true);
 	}
 
@@ -503,6 +504,7 @@ public class GameArena extends JPanel implements Runnable, KeyListener, MouseLis
 	}
 
 	public void keyReleased(KeyEvent e){
+		//System.out.println("key released");
 		keyAction(e,false);
 	}
 
