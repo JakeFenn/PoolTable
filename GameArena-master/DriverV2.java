@@ -3,6 +3,8 @@
 public class DriverV2
 {
   private Ball[] playballs = new Ball[16];
+  private Ball[] holes = new Ball[6];
+
   private GameArena ga = new GameArena(900,500); //table to be 800x400
 
   private Rectangle table = new Rectangle(20,20,760,360,"GREEN",0);
@@ -32,7 +34,7 @@ public class DriverV2
 
     for(int i=0;i<16;i++){
       if(i==0){
-        playballs[i] = new Ball(180,200,24,"WHITE",1,10,0);
+        playballs[i] = new Ball(180,200,24,"WHITE",1,0,0);
       }
       else if(i==1){
         playballs[i] = new Ball(600,200,24,"BLACK",1,0,0);
@@ -44,6 +46,14 @@ public class DriverV2
         playballs[i] = new Ball(0,0,24,"YELLOW",1,0,0);
       }
     }
+
+    holes[0] = new Ball(20,20,50,"BLACK",1,0,1);
+    holes[1] = new Ball(400,15,50,"BLACK",1,0,1);
+    holes[2] = new Ball(780,20,50,"BLACK",1,0,1);
+    holes[3] = new Ball(20,380,50,"BLACK",1,0,1);
+    holes[4] = new Ball(400,385,50,"BLACK",1,0,1);
+    holes[5] = new Ball(780,380,50,"BLACK",1,0,1);
+
 
     playballs[2].setXPosition(555);
     playballs[2].setYPosition(200);
@@ -88,8 +98,8 @@ public class DriverV2
     playballs[15].setXPosition(647);
     playballs[15].setYPosition(226);
 
-    playballs[8].setXPosition(647);
-    playballs[8].setYPosition(252);
+    playballs[8].setXPosition(30); //647
+    playballs[8].setYPosition(30); //252
 
     ga.addRectangle(table);
     ga.addRectangle(edge1);
@@ -97,12 +107,12 @@ public class DriverV2
     ga.addRectangle(edge3);
     ga.addRectangle(edge4);
 
-    ga.addBall(hole1);
-    ga.addBall(hole2);
-    ga.addBall(hole3);
-    ga.addBall(hole4);
-    ga.addBall(hole5);
-    ga.addBall(hole6);
+    ga.addBall(holes[0]);
+    ga.addBall(holes[1]);
+    ga.addBall(holes[2]);
+    ga.addBall(holes[3]);
+    ga.addBall(holes[4]);
+    ga.addBall(holes[5]);
 
     aimLine.setArrowSize(5);
 
@@ -117,13 +127,25 @@ public class DriverV2
 
   public void play(){
     double speed;
-    while(true){
+    int count = 0;
+    while(count<1000){
 
+      System.out.println("count:"+count);
       for(int k=0;k<16;k++){
 
         for(int i=k+1;i<16;i++){
           if(playballs[k].collides(playballs[i])==true){
             resolve(playballs[k],playballs[i]);
+          }
+        }
+
+        for(int i=0;i<6;i++){
+          if(playballs[k].potting(holes[i])==true){
+            System.out.println("potted:"+k);
+            ga.removeBall(playballs[k]);
+            playballs[k].setXPosition(820);
+            playballs[k].setYPosition(20);
+            playballs[k].setPotted(true);
           }
         }
 
@@ -156,8 +178,23 @@ public class DriverV2
           playballs[k].setYVelocity(0);
         }
       }
-    ga.pause();
+      count++;
+      rules();
+      ga.pause();
     }
+    System.out.println("while end");
+  }
+
+  public void rules(){
+
+    if(playballs[0].getPotted()==true){
+      playballs[0].setPotted(false);
+      setWhite();
+    }
+  }
+
+  public void setWhite(){
+
   }
 
   public void resolve(Ball a, Ball b){
