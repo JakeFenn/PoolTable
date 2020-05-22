@@ -1,4 +1,3 @@
-import java.util.Vector;
 
 /**
  * Models a simple solid sphere.
