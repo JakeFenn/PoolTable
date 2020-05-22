@@ -18,6 +18,7 @@ public class Ball
 	private String colour;				// The colour of this Ball
 	private double xvel;
 	private double yvel;
+	private boolean potted;
 
 										// Permissable colours are:
 										// BLACK, BLUE, CYAN, DARKGREY, GREY,
@@ -41,6 +42,7 @@ public class Ball
 		this.layer = layer;
 		this.xvel = xvelocity;
 		this.yvel = yvelocity;
+		this.potted = false;
 	}
 
 	/**
@@ -147,6 +149,14 @@ public class Ball
 		yvel = y;
 	}
 
+	public void setPotted(boolean p){
+		potted = p;
+	}
+
+	public boolean getPotted(){
+		return potted;
+	}
+
 	public void move(double dx, double dy)
 	{
 		xPosition += dx;
@@ -166,5 +176,14 @@ public class Ball
 		double distance = Math.sqrt(dx*dx+dy*dy);
 
 		return distance < size/2 + b.size/2;
+	}
+
+	public boolean potting(Ball b)
+	{
+		double dx = b.xPosition - xPosition;
+		double dy = b.yPosition - yPosition;
+		double distance = Math.sqrt(dx*dx+dy*dy);
+
+		return distance < size/2 + b.size/4;
 	}
 }
