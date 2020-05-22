@@ -1,18 +1,18 @@
 /**
- * Models a simple line. 
+ * Models a simple line.
  * This class represents a Line object. When combined with the GameArena class,
  * instances of the Line class can be displayed on the screen.
  */
-public class Line 
+public class Line
 {
 	// The following instance variables define the
 	// information needed to represent a line.
-	// Feel free to more instance variables if you think it will 
-	// support your work... 
-	
-	private double xStart;						// The X coordinate of the start of this line 
-	private double yStart;						// The Y coordinate of the start of this line 
-	private double xEnd;						// The X coordinate of the end of this line 
+	// Feel free to more instance variables if you think it will
+	// support your work...
+
+	private double xStart;						// The X coordinate of the start of this line
+	private double yStart;						// The Y coordinate of the start of this line
+	private double xEnd;						// The X coordinate of the end of this line
 	private double yEnd;						// The Y coordinate of the end of this line
 	private double width;						// The thickness of the line
 	private double arrowSize;					// Size of the arrowhead on this line
@@ -24,7 +24,7 @@ public class Line
 												// Permissable colours are:
 												// BLACK, BLUE, CYAN, DARKGREY, GREY,
 												// GREEN, DARKGREEN, LIGHTGREY, MAGENTA, ORANGE,
-												// PINK, RED, WHITE, YELLOW, BROWN 
+												// PINK, RED, WHITE, YELLOW, BROWN
 
 	/**
 	 * Obtains the start position of this line on the X axis.
@@ -91,7 +91,7 @@ public class Line
 	{
 		double lx = xEnd - xStart;
 		double ly = yEnd - yStart;
-		
+
 		return Math.sqrt(lx*lx + ly*ly);
 	}
 
@@ -99,8 +99,8 @@ public class Line
 	 * Moves the current position of this line to the given X and Y co-ordinates
 	 * @param x1 the new x co-ordinate of the start of this line
 	 * @param y1 the new y co-ordinate of the start of this line
-	 * @param x2 the new x co-ordinate of the end of this line 
-	 * @param y2 the new y co-ordinate of the end of this line 
+	 * @param x2 the new x co-ordinate of the end of this line
+	 * @param y2 the new y co-ordinate of the end of this line
 	 */
 	public void setLinePosition(double x1, double y1, double x2, double y2)
 	{
@@ -184,7 +184,7 @@ public class Line
 		layer = lay;
 		arrowSize = 0;
 		this.setLinePosition(x1, y1, x2, y2);
-	}	
+	}
 
 	/**
 	 * Constructor. Creates a Line with the given parameters.
@@ -203,7 +203,7 @@ public class Line
 		arrowSize = 0;
 		this.setLinePosition(x1, y1, x2, y2);
 	}
-	
+
 	private void recalculateArrowhead()
 	{
 		// Calculate component distances and length
